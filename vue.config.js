@@ -6,7 +6,5 @@ module.exports = {
       }
     }
   },
-  build: {
-    baseUrl: '/doit'
-  }
+  baseUrl: '/doit'
 }
