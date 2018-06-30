@@ -1,6 +1,7 @@
 {
   "name": "doit",
   "version": "0.1.0",
+  "homepage": "https://github.com/diemoritat/doit",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
