@@ -5,5 +5,8 @@ module.exports = {
         data: '@import "src/styles/variables/_variables.scss";'
       }
     }
+  },
+  build: {
+    assetsPublicPath: '/doit'
   }
 }
