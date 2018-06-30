@@ -7,6 +7,6 @@ module.exports = {
     }
   },
   build: {
-    assetsPublicPath: '/doit'
+    baseUrl: '/doit'
   }
 }
