@@ -19,7 +19,8 @@ export default {
     return {
       newTask: {
         name: '',
-        status: 1
+        status: 1,
+        description: ''
       },
       errorMessage: ''
     }
@@ -32,9 +33,8 @@ export default {
         this.errorMessage = '';
 
         this.$store.commit('createTask', { 
-          name: this.newTask.name, 
-          status: this.newTask.status, 
-          id: this.newTaskId
+          id: this.newTaskId,
+          ...this.newTask
         });
 
         //clear task name input

@@ -1,8 +1,20 @@
 <template>
   <li class="card">
-    <p class="card__content">
-      <strong>{{ cardData.name }}</strong>
-    </p>
+    <div class="card__content">
+      <div class="card__content-top"> 
+        <div class="card__title-holder">
+          <p class="card__title" v-if="!isEditable"> {{ cardData.name }}</p> 
+          <div class="card__input-holder" v-if="isEditable">
+            <input class="card__input" type="text" ref="title" v-model="cardData.name" @keyup.enter="saveTitle" />
+            <span class="card__input-deco"></span>
+          </div>
+        </div>
+        
+        <div class="card__icons">
+          <span @click="editTitle"> <i class="material-icons md-dark">edit</i> </span> 
+        </div>
+      </div>
+    </div>
     <div class="card__actions">
       <p class="card__actions-label">Move this task to:</p>
       <button class="card__button  card__button--to-do" v-show="(cardData.status !== 1)" type="submit" @click="updateTask(cardData.id, 'status', 1)">To Do</button>
@@ -31,19 +43,43 @@ export default {
       },
       status: {
         type: Number
+      },
+      description: {
+        type: String,
+        default: ''
       }
     }
   },
+  data() {
+    return {
+      isEditable: false
+    }
+  },
   methods: {
-    updateTask(id, field, value){
+    updateTask(id, field, value) {
       this.$store.commit('updateTask', { 
         id,
         field,
         value
       });
     },
-    deleteTask(id){
+    deleteTask(id) {
       this.$store.commit('deleteTask', { id });
+    },
+    editTitle(event) {
+      this.isEditable = true;
+      setTimeout(() => {
+        this.$refs.title.focus();
+      }, 10);
+      
+    },
+    saveTitle(event) {
+      this.isEditable = false;
+      this.$store.commit('updateTask', { 
+        id: this.cardData.id,
+        field: 'name',
+        value: this.cardData.name
+      });
     }
   }
 }
@@ -69,6 +105,57 @@ export default {
     margin-bottom: 10px;
   }
 
+  &__content-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  &__title-holder {
+    flex: 0;
+    position: relative;
+    width: 80%;
+    flex-basis: 80%;
+  }
+
+  &__title {
+    padding: 4px 0;
+  }
+
+  &__input-holder {
+    position: relative;
+  }
+
+  &__input {
+    padding: 5px;
+    border: 0;
+    width: 100%;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: $color4;
+
+    &~span {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: $color2;
+      transition: width 0.2s ease-in-out;
+    }
+
+    &:focus {
+      outline: 0;
+
+      &~span {
+        width: 100%;
+        transition: width 0.3s ease-in-out;
+      }
+    }
+  }
+
   &__actions {
     width: 100%;
 
@@ -80,6 +167,24 @@ export default {
   &__actions-label {
     font-size: 0.7rem;
     margin-bottom: 5px;
+  }
+
+  &__icons {
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-left: 10px;
+
+    .material-icons {
+      color: $color7;
+      transition: color 0.1s linear;
+    }
+
+    span:hover {
+      .material-icons {
+        color: $color3;
+        transition: color 0.2s linear;
+      }
+    }
   }
 
   &__button {
